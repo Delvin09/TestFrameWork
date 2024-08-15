@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TestFrameWork.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\Projects\\c#_pro_06_06_24\\DataStructers\\DataStructers.Test.Console\\bin\\Debug\\net8.0\\DataStructers.Lib.dll\"\r\n\"D:\\Projects\\c#_pro_06_06_24\\DataStructers\\DataStructers.Test.Console\\bin\\Debug\\net8.0\\DataStructers.Test.Console.dll\""
+    }
+  }
+}
