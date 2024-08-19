@@ -6,7 +6,7 @@ namespace TestFrameWork.CLI
     {
         static void Main(string[] args)
         {
-            var engine = new TestEngine();
+            var engine = ne w TestEngine();
             engine.Run(args);
         }
     }
