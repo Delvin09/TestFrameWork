@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
+using TestFrameWork.Abstractions;
 
 namespace TestFrameWork.Core
 {
-    class TestInfo {
-
+    class TestInfo
+    {
         public string Name { get; set; } = string.Empty;
         public MethodInfo? Method { get; set; }
 
@@ -13,9 +14,14 @@ namespace TestFrameWork.Core
             {
                 Method?.Invoke(subject, []);
             }
-            catch
+            //TODO: handle exceptions
+            catch (TargetInvocationException ex) when (ex.InnerException is AssertionFailException)
             {
-                //TODO: handle exceptions
+                // Тест просто свалився
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
