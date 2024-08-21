@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Loader;
 using TestFrameWork.Abstractions;
@@ -20,6 +21,12 @@ namespace TestFrameWork.Core
         private Assembly? _context_Resolving(AssemblyLoadContext ctx, AssemblyName assemblyToLoad)
         {
             var dir = Path.GetDirectoryName(_assemblyPath);
+
+            if (dir == null)
+                throw new NullReferenceException();
+
+            if (!Directory.Exists(dir))
+                throw new DirectoryNotFoundException();
 
             var assemblyPath = Path.Combine(dir, assemblyToLoad.Name += ".dll");
 

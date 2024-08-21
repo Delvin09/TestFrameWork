@@ -6,7 +6,7 @@ namespace TestFrameWork.Core
     {
         public string Name { get; set; } = string.Empty;
 
-        public Type Type { get; set; }
+        public required Type Type { get; set; }
 
         public ImmutableArray<TestInfo> Tests { get; set; }
 
@@ -17,7 +17,9 @@ namespace TestFrameWork.Core
         public void Run()
         {
             var instance = Activator.CreateInstance(Type);
-            if (instance == null) throw new InvalidOperationException();
+
+            if (instance == null) 
+                throw new InvalidOperationException();
 
             BeforeGroupTestRun += OnBeforeGroupTestRun;
 

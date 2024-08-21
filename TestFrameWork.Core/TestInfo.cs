@@ -21,7 +21,7 @@ namespace TestFrameWork.Core
             }
             catch (Exception ex)
             {
-
+                throw;
             }
         }
     }
