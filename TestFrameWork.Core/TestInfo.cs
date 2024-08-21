@@ -19,7 +19,7 @@ namespace TestFrameWork.Core
             {
                 // Тест просто свалився
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
