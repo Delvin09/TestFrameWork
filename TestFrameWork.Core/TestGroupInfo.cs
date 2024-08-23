@@ -10,10 +10,6 @@ namespace TestFrameWork.Core
         public required Type Type { get; set; }
 
         public ImmutableArray<TestInfo> Tests { get; set; }
-
-        public event EventHandler<TestEventArgs>? BeforeTest;
-
-        public event EventHandler<AfterTestEventArgs>? AfterTest;
         public void Run()
         {
             var instance = Activator.CreateInstance(Type);
@@ -31,10 +27,14 @@ namespace TestFrameWork.Core
             }
         }
 
-        public void OnBeforeTest(object? sender, TestEventArgs e) => 
-            BeforeTest?.Invoke(this, e);
+        public void OnBeforeTest(object? sender, TestEventArgs e)
+        {
+            //TODO: Handle OnBeforeTest event
+        }
 
-        public void OnAfterTest(object? sender, AfterTestEventArgs e) => 
-            AfterTest?.Invoke(this, e);
+        public void OnAfterTest(object? sender, AfterTestEventArgs e)
+        {
+            //TODO: Handle OnAfterTest event
+        }
     }
 }
