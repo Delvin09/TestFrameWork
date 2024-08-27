@@ -8,6 +8,7 @@ namespace TestFrameWork.CLI
         {
             var engine = new TestEngine();
             engine.Run(args);
+            WriteResultToTxt.WriteResultToFile(engine.testReport!);
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
+using TestFrameWork.Core.TestResults;
 
-namespace TestFrameWork.Core
+namespace TestFrameWork.Core.ResultsOfTests
 {
     public class TestGroupInfo
     {

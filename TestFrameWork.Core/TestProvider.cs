@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.Loader;
 using TestFrameWork.Abstractions;
+using TestFrameWork.Core.ResultsOfTests;
 
 namespace TestFrameWork.Core
 {

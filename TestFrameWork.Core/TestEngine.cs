@@ -2,9 +2,10 @@
 {
     public class TestEngine
     {
+        public TestReport ?testReport;
         public void Run(string[] assembliesPath)
         {
-            TestReport testReport = new TestReport();
+            testReport = new TestReport();
             foreach (var path in assembliesPath)
             {
                 using (var provider = new TestProvider(path))

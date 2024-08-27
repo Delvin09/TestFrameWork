@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestFrameWork.Core
+namespace TestFrameWork.Core.TestResults
 {
     public class TestGroupResult
     {
         public List<TestResult> _results;
-        double _totalGroupTime {  get => CountTotalTime(); }
+        double _totalGroupTime { get => CountTotalTime(); }
         public TestGroupResult()
         {
             _results = new List<TestResult>();
