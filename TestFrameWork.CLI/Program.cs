@@ -8,6 +8,9 @@ namespace TestFrameWork.CLI
         {
             var engine = new TestEngine();
             engine.Run(args);
+
+            SaveLogToFile logger = new SaveLogToFile();
+            logger.SaveLog();
         }
     }
 }
