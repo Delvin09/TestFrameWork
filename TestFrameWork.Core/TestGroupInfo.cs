@@ -19,11 +19,7 @@ namespace TestFrameWork.Core
             if (instance == null) throw new InvalidOperationException();
             foreach (var test in Tests)
             {
-                Stopwatch stopWatch = Stopwatch.StartNew();
-                Exception success = test.Run(instance);
-                stopWatch.Stop();
-                double time = stopWatch.Elapsed.TotalSeconds;
-                GroupResult.AddTestResult(new TestResult(test.Name, success, time));
+                GroupResult.AddTestResult(test.Run(instance));
             }
         }
     }
