@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestFrameWork.Core.TestResults
+namespace TestFrameWork.Core.ResultsOfTests
 {
     public class TestResult
     {

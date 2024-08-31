@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestFrameWork.Core.TestResults
+namespace TestFrameWork.Core.ResultsOfTests
 {
     public class TestGroupResult
     {

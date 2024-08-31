@@ -29,30 +29,36 @@ namespace TestFrameWork.Core
             foreach (var group in tests)
             {
                 report.AppendLine($"Group: {group.Name}");
-                report.AppendLine($"Group Execution Time: {group.GroupResult.CountTotalTime()}s");
-                totalExecutionTime += group.GroupResult.CountTotalTime();
-
-                foreach (var test in group.GroupResult._results)
+                if (!group.InstanceSuccess)
+                    report.AppendLine("Failed to create instance.");
+                else
                 {
-                    report.Append($"Test: {test.TestName} - ");
+                    report.AppendLine($"Instance of type {group.Type!.FullName} created successfully.");
+                    report.AppendLine($"Group Execution Time: {group.GroupResult.CountTotalTime()}s");
+                    totalExecutionTime += group.GroupResult.CountTotalTime();
 
-                    if (test.Status == "Passed")
+                    foreach (var test in group.GroupResult._results)
                     {
-                        report.AppendLine($"Passed - Time: {test.Time}s");
+                        report.Append($"Test: {test.TestName} - ");
+
+                        if (test.Status == "Passed")
+                        {
+                            report.AppendLine($"Passed - Time: {test.Time}s");
+                        }
+                        else if (test.Status == "Failed")
+                        {
+                            report.AppendLine($"Failed - Time: {test.Time}s");
+                            report.AppendLine($"Exception: {test.Exception.InnerException!.Message}");
+                        }
+                        else if (test.Status == "Unhandled Exception")
+                        {
+                            report.AppendLine($"Unhandled Exception - Time: {test.Time}s");
+                            report.AppendLine($"Exception: {test.Exception.Message}");
+                        }
                     }
-                    else if (test.Status == "Failed")
-                    {
-                        report.AppendLine($"Failed - Time: {test.Time}s");
-                        report.AppendLine($"Exception: {test.Exception.InnerException!.Message}");
-                    }
-                    else if (test.Status == "Unhandled Exception")
-                    {
-                        report.AppendLine($"Unhandled Exception - Time: {test.Time}s");
-                        report.AppendLine($"Exception: {test.Exception.Message}");
-                    }
+
+                    report.AppendLine();
                 }
-
-                report.AppendLine();
             }
 
             report.AppendLine($"Total Execution Time: {totalExecutionTime}s");

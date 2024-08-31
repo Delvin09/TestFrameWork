@@ -12,8 +12,7 @@ namespace TestFrameWork.CLI
     {
         public static void WriteResultToFile(TestReport testReport)
         {
-            string directoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string filePath = Path.Combine(directoryPath, "TestReport.txt");
+            string filePath = "testResults.txt";
             try
             {
                 File.WriteAllText(filePath, testReport.ToString());
