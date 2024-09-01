@@ -1,24 +1,37 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace TestFrameWork.Core
 {
     internal class TestGroupInfo
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
-        public Type Type { get; set; }
+        public Type? Type { get; init; }
 
-        public ImmutableArray<TestInfo> Tests { get; set; }
+        public ImmutableArray<TestInfo> Tests { get; init; }
 
-        public void Run()
+        public TestGroupResult Run()
         {
-            var instance = Activator.CreateInstance(Type);
-            if (instance == null) throw new InvalidOperationException();
-
-            foreach (var test in Tests)
+            var result = new TestGroupResult(Name);
+            try
             {
-                test.Run(instance);
+                if (Type == null) throw new InvalidOperationException($"Test Class [{Name}] can't be found!");
+
+                var instance = Activator.CreateInstance(Type);
+                if (instance == null) throw new InvalidOperationException("Test Class isn't created.");
+
+                foreach (var test in Tests)
+                {
+                    result.AddTestResult(test.Run(instance));
+                }
             }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+            }
+
+            return result;
         }
     }
 }
