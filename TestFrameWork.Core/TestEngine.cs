@@ -2,7 +2,7 @@
 {
     public class TestEngine
     {
-        public void Run(string[] assembliesPath)
+        public TestReport Run(string[] assembliesPath)
         {
             TestReport testReport = new TestReport();
             foreach (var path in assembliesPath)
@@ -16,6 +16,7 @@
                     }
                 }
             }
+            return testReport;
         }
     }
 }

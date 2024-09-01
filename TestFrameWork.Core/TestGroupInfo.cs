@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace TestFrameWork.Core
 {
-    public class TestGroupInfo
+    internal class TestGroupInfo
     {
         public string Name { get; set; } = string.Empty;
         public Type? Type { get; set; }
