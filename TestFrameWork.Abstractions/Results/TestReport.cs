@@ -68,7 +68,7 @@ namespace TestFrameWork.Abstractions.Results
 
             try
             {
-                File.WriteAllText(filePath, ToString());
+                File.WriteAllText(path, ToString());
                 Console.WriteLine($"Report successfully written to {filePath}");
             }
             catch (Exception ex)
