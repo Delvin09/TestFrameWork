@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TestFrameWork.Core.ResultsOfTests
+namespace TestFrameWork.Abstractions.Results
 {
     public class TestReport
     {
@@ -53,9 +53,19 @@ namespace TestFrameWork.Core.ResultsOfTests
             report.AppendLine($"Total Execution Time: {totalExecutionTime}s");
             return report.ToString();
         }
-        public void WriteToTxtFile()
+
+        public void SaveToFile(string? path = null)
         {
-            string filePath = "testResults.txt";
+            string filePath = string.IsNullOrEmpty(path) ? "testResults.txt" : path;
+
+            string ext = string.IsNullOrEmpty(Path.GetExtension(filePath)) ? ".txt" : Path.GetExtension(filePath);
+            string? fileName = Path.GetFileNameWithoutExtension(filePath);
+            string? folderPath = Path.GetDirectoryName(filePath) ?? string.Empty;
+
+            if (string.IsNullOrEmpty(fileName)) throw new ArgumentException(nameof(fileName));
+
+            path = Path.Combine(folderPath, $"{fileName}_{DateTime.Now:yyyy-MM-dd_HH-mm-ss.ffff}{ext}");
+
             try
             {
                 File.WriteAllText(filePath, ToString());

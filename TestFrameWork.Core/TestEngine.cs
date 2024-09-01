@@ -1,4 +1,4 @@
-﻿using TestFrameWork.Core.ResultsOfTests;
+﻿using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
@@ -7,6 +7,7 @@ namespace TestFrameWork.Core
         public TestReport Run(string[] assembliesPath)
         {
             TestReport testReport = new TestReport();
+
             foreach (var path in assembliesPath)
             {
                 using (var provider = new TestProvider(path))

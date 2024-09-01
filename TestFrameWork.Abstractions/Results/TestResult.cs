@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace TestFrameWork.Core.ResultsOfTests
+namespace TestFrameWork.Abstractions.Results
 {
     public class TestResult
     {
