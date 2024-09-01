@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace TestFrameWork.Core
 {
     public class TestReport
     {
-        private List<TestGroupInfo> tests;
-        public TestReport()
+        private List<TestGroupResult> _testGroupResults = new List<TestGroupResult>();
+
+        public void AddTestGroup(TestGroupResult testGroupResult)
         {
-            tests = new List<TestGroupInfo>();
+            _testGroupResults.Add(testGroupResult);
         }
-        public void AddTestGroup(TestGroupInfo testGroupResult)
-        {
-            tests.Add(testGroupResult);
-        }
+
         public override string ToString()
         {
             StringBuilder report = new StringBuilder();
@@ -25,13 +19,15 @@ namespace TestFrameWork.Core
             report.AppendLine("Test Report");
             report.AppendLine("-----------");
 
-            foreach (var group in tests)
+            foreach (var group in _testGroupResults)
             {
-                report.AppendLine($"Group: {group.Name}");
-                report.AppendLine($"Group Execution Time: {group.GroupResult.CountTotalTime()}s");
-                totalExecutionTime += group.GroupResult.CountTotalTime();
+                var groupTotalCount = group.CountTotalTime();
+                totalExecutionTime += groupTotalCount;
 
-                foreach (var test in group.GroupResult._results)
+                report.AppendLine($"Group: {group.Name}");
+                report.AppendLine($"Group Execution Time: {groupTotalCount}s");
+
+                foreach (var test in group)
                 {
                     report.Append($"Test: {test.TestName} - ");
 
@@ -42,12 +38,12 @@ namespace TestFrameWork.Core
                     else if (test.Status == "Failed")
                     {
                         report.AppendLine($"Failed - Time: {test.Time}s");
-                        report.AppendLine($"Exception: {test.Exception.InnerException!.Message}");
+                        report.AppendLine($"Exception: {test.Exception?.InnerException!.Message}");
                     }
                     else if (test.Status == "Unhandled Exception")
                     {
                         report.AppendLine($"Unhandled Exception - Time: {test.Time}s");
-                        report.AppendLine($"Exception: {test.Exception.Message}");
+                        report.AppendLine($"Exception: {test.Exception?.Message}");
                     }
                 }
 
