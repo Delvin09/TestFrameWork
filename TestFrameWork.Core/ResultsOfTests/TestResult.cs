@@ -12,12 +12,12 @@ namespace TestFrameWork.Core.ResultsOfTests
         public string TestName { get; init; }
         public Exception Exception { get; init; }
         public string? Status { get; private set; }
-        public double Time { get; init; }
-        public TestResult(string testName, Exception success, double time)
+        public double Time { get; private set; }
+        public TestResult(string testName, Exception success, TimeSpan time)
         {
             TestName = testName;
             Exception = success;
-            Time = time;
+            GetTime(time);
             GetStatus();
         }
         private void GetStatus()
@@ -28,6 +28,10 @@ namespace TestFrameWork.Core.ResultsOfTests
                 Status = "Failed";
             else
                 Status = "Unhandled Exception";
+        }
+        private void GetTime(TimeSpan timeSpan)
+        {
+            Time = timeSpan.TotalSeconds;
         }
     }
 }

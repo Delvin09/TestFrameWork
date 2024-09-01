@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace TestFrameWork.Core.ResultsOfTests
 {
-    public class TestGroupInfo
+    internal class TestGroupInfo
     {
         public string Name { get; set; } = string.Empty;
         public Type? Type { get; set; }
@@ -24,11 +24,7 @@ namespace TestFrameWork.Core.ResultsOfTests
             }
             foreach (var test in Tests)
             {
-                Stopwatch stopWatch = Stopwatch.StartNew();
-                Exception success = test.Run(instance);
-                stopWatch.Stop();
-                double time = stopWatch.Elapsed.TotalSeconds;
-                GroupResult.AddTestResult(new TestResult(test.Name, success, time));
+                GroupResult.AddTestResult(test.Run(instance));
             }
         }
     }
