@@ -4,7 +4,7 @@
     {
         public TestReport Run(string[] assembliesPath)
         {
-            testReport = new TestReport();
+            TestReport testReport = new TestReport();
             foreach (var path in assembliesPath)
             {
                 using (var provider = new TestProvider(path))

@@ -7,8 +7,8 @@ namespace TestFrameWork.CLI
         static void Main(string[] args)
         {
             var engine = new TestEngine();
-            engine.Run(args);
-            WriteResultToTxt.WriteResultToFile(engine.testReport!);
+            TestReport testReport = engine.Run(args);
+            testReport.WriteToTxtFile();
         }
     }
 }

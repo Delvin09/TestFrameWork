@@ -64,5 +64,18 @@ namespace TestFrameWork.Core
             report.AppendLine($"Total Execution Time: {totalExecutionTime}s");
             return report.ToString();
         }
+        public void WriteToTxtFile()
+        {
+            string filePath = "testResults.txt";
+            try
+            {
+                File.WriteAllText(filePath, this.ToString());
+                Console.WriteLine($"Report successfully written to {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to write report to file. Exception: {ex.Message}");
+            }
+        }
     }
 }

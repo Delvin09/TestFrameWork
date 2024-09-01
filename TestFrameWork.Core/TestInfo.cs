@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using TestFrameWork.Core.ResultsOfTests;
 using TestFrameWork.Abstractions;
 using static System.Net.Mime.MediaTypeNames;
 
