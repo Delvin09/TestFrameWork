@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TestFrameWork.Core
+namespace TestFrameWork.Core.ResultsOfTests
 {
     public class TestReport
     {
@@ -47,8 +47,7 @@ namespace TestFrameWork.Core
                     }
                 }
 
-                    report.AppendLine();
-                }
+                report.AppendLine();
             }
 
             report.AppendLine($"Total Execution Time: {totalExecutionTime}s");
@@ -59,7 +58,7 @@ namespace TestFrameWork.Core
             string filePath = "testResults.txt";
             try
             {
-                File.WriteAllText(filePath, this.ToString());
+                File.WriteAllText(filePath, ToString());
                 Console.WriteLine($"Report successfully written to {filePath}");
             }
             catch (Exception ex)

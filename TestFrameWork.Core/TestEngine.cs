@@ -1,4 +1,6 @@
-﻿namespace TestFrameWork.Core
+﻿using TestFrameWork.Core.ResultsOfTests;
+
+namespace TestFrameWork.Core
 {
     public class TestEngine
     {

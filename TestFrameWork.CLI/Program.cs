@@ -1,4 +1,5 @@
 ﻿using TestFrameWork.Core;
+using TestFrameWork.Core.ResultsOfTests;
 
 namespace TestFrameWork.CLI
 {

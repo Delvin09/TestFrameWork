@@ -1,9 +1,9 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics;
+using TestFrameWork.Core.ResultsOfTests;
 
-namespace TestFrameWork.Core.ResultsOfTests
+namespace TestFrameWork.Core
 {
-    public class TestGroupInfo
+    internal class TestGroupInfo
     {
         public string Name { get; init; } = string.Empty;
 
