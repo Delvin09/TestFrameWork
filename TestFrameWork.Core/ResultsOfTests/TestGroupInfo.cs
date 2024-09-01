@@ -5,27 +5,33 @@ namespace TestFrameWork.Core.ResultsOfTests
 {
     public class TestGroupInfo
     {
-        public string Name { get; set; } = string.Empty;
-        public Type? Type { get; set; }
-        public ImmutableArray<TestInfo> Tests { get; set; }
-        public TestGroupResult GroupResult { get; set; }
-        public bool InstanceSuccess { get; private set; } = true;
-        public TestGroupInfo()
+        public string Name { get; init; } = string.Empty;
+
+        public Type? Type { get; init; }
+
+        public ImmutableArray<TestInfo> Tests { get; init; }
+
+        public TestGroupResult Run()
         {
-            GroupResult = new TestGroupResult();
-        }
-        public void Run()
-        {
-            var instance = Activator.CreateInstance(Type!);
-            if (instance == null)
+            var result = new TestGroupResult(Name);
+            try
             {
-                InstanceSuccess = false;
-                throw new InvalidOperationException();
+                if (Type == null) throw new InvalidOperationException($"Test Class [{Name}] can't be found!");
+
+                var instance = Activator.CreateInstance(Type);
+                if (instance == null) throw new InvalidOperationException("Test Class isn't created.");
+
+                foreach (var test in Tests)
+                {
+                    result.AddTestResult(test.Run(instance));
+                }
             }
-            foreach (var test in Tests)
+            catch (Exception ex)
             {
-                GroupResult.AddTestResult(test.Run(instance));
+                result.Exception = ex;
             }
+
+            return result;
         }
     }
 }

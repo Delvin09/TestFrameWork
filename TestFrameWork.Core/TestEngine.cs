@@ -11,8 +11,8 @@
                 {
                     foreach (var group in provider.GetTests())
                     {
-                        group.Run();
-                        testReport.AddTestGroup(group);
+                        var groupTestResult = group.Run();
+                        testReport.AddTestGroup(groupTestResult);
                     }
                 }
             }

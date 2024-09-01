@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestFrameWork.Core.ResultsOfTests;
+﻿using System.Text;
 
 namespace TestFrameWork.Core
 {
     public class TestReport
     {
-        private List<TestGroupInfo> tests;
-        public TestReport()
+        private List<TestGroupResult> _testGroupResults = new List<TestGroupResult>();
+
+        public void AddTestGroup(TestGroupResult testGroupResult)
         {
-            tests = new List<TestGroupInfo>();
+            _testGroupResults.Add(testGroupResult);
         }
-        public void AddTestGroup(TestGroupInfo testGroupResult)
-        {
-            tests.Add(testGroupResult);
-        }
+
         public override string ToString()
         {
             StringBuilder report = new StringBuilder();
@@ -26,36 +19,33 @@ namespace TestFrameWork.Core
             report.AppendLine("Test Report");
             report.AppendLine("-----------");
 
-            foreach (var group in tests)
+            foreach (var group in _testGroupResults)
             {
+                var groupTotalCount = group.CountTotalTime();
+                totalExecutionTime += groupTotalCount;
+
                 report.AppendLine($"Group: {group.Name}");
-                if (!group.InstanceSuccess)
-                    report.AppendLine("Failed to create instance.");
-                else
+                report.AppendLine($"Group Execution Time: {groupTotalCount}s");
+
+                foreach (var test in group)
                 {
-                    report.AppendLine($"Instance of type {group.Type!.FullName} created successfully.");
-                    report.AppendLine($"Group Execution Time: {group.GroupResult.CountTotalTime()}s");
-                    totalExecutionTime += group.GroupResult.CountTotalTime();
+                    report.Append($"Test: {test.TestName} - ");
 
-                    foreach (var test in group.GroupResult._results)
+                    if (test.Status == "Passed")
                     {
-                        report.Append($"Test: {test.TestName} - ");
-
-                        if (test.Status == "Passed")
-                        {
-                            report.AppendLine($"Passed - Time: {test.Time}s");
-                        }
-                        else if (test.Status == "Failed")
-                        {
-                            report.AppendLine($"Failed - Time: {test.Time}s");
-                            report.AppendLine($"Exception: {test.Exception.InnerException!.Message}");
-                        }
-                        else if (test.Status == "Unhandled Exception")
-                        {
-                            report.AppendLine($"Unhandled Exception - Time: {test.Time}s");
-                            report.AppendLine($"Exception: {test.Exception.Message}");
-                        }
+                        report.AppendLine($"Passed - Time: {test.Time}s");
                     }
+                    else if (test.Status == "Failed")
+                    {
+                        report.AppendLine($"Failed - Time: {test.Time}s");
+                        report.AppendLine($"Exception: {test.Exception?.InnerException!.Message}");
+                    }
+                    else if (test.Status == "Unhandled Exception")
+                    {
+                        report.AppendLine($"Unhandled Exception - Time: {test.Time}s");
+                        report.AppendLine($"Exception: {test.Exception?.Message}");
+                    }
+                }
 
                     report.AppendLine();
                 }
