@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TestFrameWork.Core
+namespace TestFrameWork.Abstractions.Results
 {
     public class TestReport
     {
@@ -52,6 +52,29 @@ namespace TestFrameWork.Core
 
             report.AppendLine($"Total Execution Time: {totalExecutionTime}s");
             return report.ToString();
+        }
+
+        public void SaveToFile(string? path = null)
+        {
+            string filePath = string.IsNullOrEmpty(path) ? "testResults.txt" : path;
+
+            string ext = string.IsNullOrEmpty(Path.GetExtension(filePath)) ? ".txt" : Path.GetExtension(filePath);
+            string? fileName = Path.GetFileNameWithoutExtension(filePath);
+            string? folderPath = Path.GetDirectoryName(filePath) ?? string.Empty;
+
+            if (string.IsNullOrEmpty(fileName)) throw new ArgumentException(nameof(fileName));
+
+            path = Path.Combine(folderPath, $"{fileName}_{DateTime.Now:yyyy-MM-dd_HH-mm-ss.ffff}{ext}");
+
+            try
+            {
+                File.WriteAllText(filePath, ToString());
+                Console.WriteLine($"Report successfully written to {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to write report to file. Exception: {ex.Message}");
+            }
         }
     }
 }

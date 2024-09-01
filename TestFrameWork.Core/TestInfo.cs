@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
@@ -11,18 +12,19 @@ namespace TestFrameWork.Core
 
         public TestResult Run(object subject)
         {
+            Exception? exception = null;
             Stopwatch stopWatch = Stopwatch.StartNew();
             try
             {
                 Method?.Invoke(subject, []);
-                stopWatch.Stop();
-                return new TestResult(Name, null, stopWatch.Elapsed);
             }
             catch (Exception ex)
             {
-                stopWatch.Stop();
-                return new TestResult(Name, ex, stopWatch.Elapsed);
+                exception = ex;
             }
+
+            stopWatch.Stop();
+            return new TestResult(Name, exception, stopWatch.Elapsed);
         }
     }
 }

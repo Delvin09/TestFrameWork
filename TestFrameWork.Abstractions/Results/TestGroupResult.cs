@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace TestFrameWork.Core
+namespace TestFrameWork.Abstractions.Results
 {
     public class TestGroupResult : IEnumerable<TestResult>
     {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
