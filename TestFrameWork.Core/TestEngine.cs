@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-using TestFrameWork.Abstractions.Results;
+﻿using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
