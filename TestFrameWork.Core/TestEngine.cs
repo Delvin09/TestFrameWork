@@ -1,4 +1,6 @@
-﻿namespace TestFrameWork.Core
+﻿using System.Xml.Linq;
+
+namespace TestFrameWork.Core
 {
     public class TestEngine
     {
@@ -10,10 +12,19 @@
                 {
                     foreach (var group in provider.GetTests())
                     {
+                        group.BeforeGroupTestRun += OnBeforeGroupTestRun;
                         group.Run();
+                        group.AfterGroupTestRun += OnAfterGroupTestRun;
+
+                        group.BeforeGroupTestRun -= OnBeforeGroupTestRun;
+                        group.AfterGroupTestRun -= OnAfterGroupTestRun;
                     }
                 }
             }
         }
+
+        private void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e) => OnBeforeGroupTestRun(sender, e);
+
+        private void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e) => OnAfterGroupTestRun(sender, e);
     }
 }

@@ -21,32 +21,25 @@ namespace TestFrameWork.Core
             if (instance == null) 
                 throw new InvalidOperationException();
 
-            BeforeGroupTestRun += OnBeforeGroupTestRun;
-
             foreach (var test in Tests)
             {
                 test.Run(instance);
             }
-
-            AfterGroupTestRun += OnAfterGroupTestRun;
-
-            BeforeGroupTestRun -= OnBeforeGroupTestRun;
-            AfterGroupTestRun -= OnAfterGroupTestRun;
         }
 
-        private void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e)
+        public void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e)
         {
             if (BeforeGroupTestRun != null)
             {
-                e = new TestGroupEventArgs { GroupName = Name };
+                e = new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! };
                 BeforeGroupTestRun?.Invoke(this, e);
             }
         }
-        private void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e)
+        public void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e)
         {
             if (AfterGroupTestRun != null)
             {
-                e = new TestGroupEventArgs { GroupName = Name };
+                e = new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! };
                 AfterGroupTestRun?.Invoke(this, e);
             }
         }
