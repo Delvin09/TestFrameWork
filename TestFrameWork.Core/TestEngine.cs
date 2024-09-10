@@ -1,11 +1,15 @@
 ﻿using System.Xml.Linq;
 
+using TestFrameWork.Abstractions.Results;
+
 namespace TestFrameWork.Core
 {
     public class TestEngine
     {
-        public void Run(string[] assembliesPath)
+        public TestReport Run(string[] assembliesPath)
         {
+            TestReport testReport = new TestReport();
+
             foreach (var path in assembliesPath)
             {
                 using (var provider = new TestProvider(path))
@@ -13,7 +17,10 @@ namespace TestFrameWork.Core
                     foreach (var group in provider.GetTests())
                     {
                         group.BeforeGroupTestRun += OnBeforeGroupTestRun;
-                        group.Run();
+
+                        var groupTestResult = group.Run();
+                        testReport.AddTestGroup(groupTestResult);
+
                         group.AfterGroupTestRun += OnAfterGroupTestRun;
 
                         group.BeforeGroupTestRun -= OnBeforeGroupTestRun;
@@ -21,6 +28,7 @@ namespace TestFrameWork.Core
                     }
                 }
             }
+            return testReport;
         }
 
         private void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e) => OnBeforeGroupTestRun(sender, e);

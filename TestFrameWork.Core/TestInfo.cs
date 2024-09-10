@@ -1,28 +1,30 @@
-﻿using System.Reflection;
-using TestFrameWork.Abstractions;
+﻿using System.Diagnostics;
+using System.Reflection;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
-    class TestInfo
+    internal class TestInfo
     {
         public string Name { get; set; } = string.Empty;
+
         public MethodInfo? Method { get; set; }
 
-        public void Run(object subject)
+        public TestResult Run(object subject)
         {
+            Exception? exception = null;
+            Stopwatch stopWatch = Stopwatch.StartNew();
             try
             {
                 Method?.Invoke(subject, []);
             }
-            //TODO: handle exceptions
-            catch (TargetInvocationException ex) when (ex.InnerException is AssertionFailException)
+            catch (Exception ex)
             {
-                // Тест просто свалився
+                exception = ex;
             }
-            catch
-            {
-                throw;
-            }
+
+            stopWatch.Stop();
+            return new TestResult(Name, exception, stopWatch.Elapsed);
         }
     }
 }

@@ -22,13 +22,7 @@ namespace TestFrameWork.Core
         {
             var dir = Path.GetDirectoryName(_assemblyPath);
 
-            if (dir == null)
-                throw new NullReferenceException();
-
-            if (!Directory.Exists(dir))
-                throw new DirectoryNotFoundException();
-
-            var assemblyPath = Path.Combine(dir, assemblyToLoad.Name += ".dll");
+            var assemblyPath = Path.Combine(dir!, assemblyToLoad.Name += ".dll");
 
             var assembly = ctx.LoadFromAssemblyPath(assemblyPath);
             return assembly;
@@ -66,6 +60,5 @@ namespace TestFrameWork.Core
                         .ToImmutableArray()
                 });
         }
-
     }
 }
