@@ -24,32 +24,31 @@ namespace TestFrameWork.Core
 
                 foreach (var test in Tests)
                 {
-                    test.BeforeTest += OnBeforeTest;
-                    test.AfterTest += OnAfterTest;
+                    test.BeforeTest += Test_BeforeTest;
+                    test.AfterTest += Test_AfterTest;
 
                     result.AddTestResult(test.Run(instance));
 
-                    test.BeforeTest -= OnBeforeTest;
-                    test.AfterTest -= OnAfterTest;
+                    test.BeforeTest -= Test_BeforeTest;
+                    test.AfterTest -= Test_AfterTest;
                 }
             }
             catch (Exception ex)
             {
                 result.Exception = ex;
-
             }
 
             return result;
         }
 
-        public void OnBeforeTest(object? sender, TestEventArgs e)
+        private void Test_AfterTest(object? sender, AfterTestEventArgs e)
         {
-            //TODO: Handle OnBeforeTest event
+            throw new NotImplementedException();
         }
 
-        public void OnAfterTest(object? sender, AfterTestEventArgs e)
+        private void Test_BeforeTest(object? sender, TestEventArgs e)
         {
-            //TODO: Handle OnAfterTest event
+            throw new NotImplementedException();
         }
     }
 }
