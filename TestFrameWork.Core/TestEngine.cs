@@ -14,23 +14,29 @@ namespace TestFrameWork.Core
                 {
                     foreach (var group in provider.GetTests())
                     {
-                        group.BeforeGroupTestRun += OnBeforeGroupTestRun;
+                        group.BeforeGroupTestRun += Group_BeforeGroupTestRun;
+                        group.AfterGroupTestRun += Group_AfterGroupTestRun;
 
                         var groupTestResult = group.Run();
                         testReport.AddTestGroup(groupTestResult);
 
-                        group.AfterGroupTestRun += OnAfterGroupTestRun;
 
-                        group.BeforeGroupTestRun -= OnBeforeGroupTestRun;
-                        group.AfterGroupTestRun -= OnAfterGroupTestRun;
+                        group.BeforeGroupTestRun -= Group_BeforeGroupTestRun;
+                        group.AfterGroupTestRun -= Group_AfterGroupTestRun;
                     }
                 }
             }
             return testReport;
         }
 
-        private void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e) => OnBeforeGroupTestRun(sender, e);
+        private void Group_BeforeGroupTestRun(object? sender, TestGroupEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-        private void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e) => OnAfterGroupTestRun(sender, e);
+        private void Group_AfterGroupTestRun(object? sender, TestGroupEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

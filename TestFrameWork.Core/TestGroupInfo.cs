@@ -17,6 +17,8 @@ namespace TestFrameWork.Core
 
         public TestGroupResult Run()
         {
+            OnBeforeGroupTestRun(this, new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! });
+
             var result = new TestGroupResult(Name);
             try
             {
@@ -35,24 +37,12 @@ namespace TestFrameWork.Core
                 result.Exception = ex;
             }
 
+            OnAfterGroupTestRun(this, new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! });
+
             return result;
         }
 
-        public void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e)
-        {
-            if (BeforeGroupTestRun != null)
-            {
-                e = new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! };
-                BeforeGroupTestRun?.Invoke(this, e);
-            }
-        }
-        public void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e)
-        {
-            if (AfterGroupTestRun != null)
-            {
-                e = new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! };
-                AfterGroupTestRun?.Invoke(this, e);
-            }
-        }
+        public void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e) => BeforeGroupTestRun?.Invoke(this, e);
+        public void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e) => AfterGroupTestRun?.Invoke(this, e);
     }
 }
