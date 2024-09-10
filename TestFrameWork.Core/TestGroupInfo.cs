@@ -1,30 +1,45 @@
 ﻿using System.Collections.Immutable;
+using TestFrameWork.Abstractions.Results;
 using TestFrameWork.Abstractions;
 
 namespace TestFrameWork.Core
 {
     internal class TestGroupInfo
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
         public required Type Type { get; set; }
 
-        public ImmutableArray<TestInfo> Tests { get; set; }
-        public void Run()
+        public ImmutableArray<TestInfo> Tests { get; init; }
+
+        public TestGroupResult Run()
         {
-            var instance = Activator.CreateInstance(Type);
-            if (instance == null) throw new InvalidOperationException();
-
-            foreach (var test in Tests)
+            var result = new TestGroupResult(Name);
+            try
             {
-                test.BeforeTest += OnBeforeTest;
-                test.AfterTest += OnAfterTest;
+                if (Type == null) throw new InvalidOperationException($"Test Class [{Name}] can't be found!");
 
-                test.Run(instance);
+                var instance = Activator.CreateInstance(Type);
+                if (instance == null) throw new InvalidOperationException("Test Class isn't created.");
 
-                test.BeforeTest -= OnBeforeTest;
-                test.AfterTest -= OnAfterTest;
+                foreach (var test in Tests)
+                {
+                    test.BeforeTest += OnBeforeTest;
+                    test.AfterTest += OnAfterTest;
+
+                    result.AddTestResult(test.Run(instance));
+
+                    test.BeforeTest -= OnBeforeTest;
+                    test.AfterTest -= OnAfterTest;
+                }
             }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+
+            }
+
+            return result;
         }
 
         public void OnBeforeTest(object? sender, TestEventArgs e)

@@ -1,4 +1,5 @@
-﻿using TestFrameWork.Core;
+﻿using TestFrameWork.Abstractions.Results;
+using TestFrameWork.Core;
 
 namespace TestFrameWork.CLI
 {
@@ -7,7 +8,8 @@ namespace TestFrameWork.CLI
         static void Main(string[] args)
         {
             var engine = new TestEngine();
-            engine.Run(args);
+            TestReport testReport = engine.Run(args);
+            testReport.SaveToFile();
         }
     }
 }

@@ -1,22 +1,26 @@
-﻿using System.Reflection;
-using TestFrameWork.Abstractions;
+﻿using System.Diagnostics;
+using System.Reflection;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
-    class TestInfo
+    internal class TestInfo
     {
         private readonly string _assemblyName = string.Empty;
         private readonly string _groupName = string.Empty;
         private TestState _testState;
         private string? _message;
         public string Name { get; set; } = string.Empty;
+
         public MethodInfo? Method { get; set; }
 
         public event EventHandler<TestEventArgs>? BeforeTest;
 
         public event EventHandler<AfterTestEventArgs>? AfterTest;
-        public void Run(object subject)
+        public TestResult Run(object subject)
         {
+            Exception? exception = null;
+            Stopwatch stopWatch = Stopwatch.StartNew();
             try
             {
                 _testState = TestState.Pending;
@@ -45,6 +49,9 @@ namespace TestFrameWork.Core
                 AfterTestEventArgs afterTestArgs = new AfterTestEventArgs { AssemblyName = _assemblyName, GroupName = _groupName, TestName = Name, Result = _testState, Message = _message };
                 OnAfterTest(afterTestArgs);
             }
+
+            stopWatch.Stop();
+            return new TestResult(Name, exception, stopWatch.Elapsed);
         }
 
         public void OnBeforeTest(TestEventArgs e) => 
