@@ -2,6 +2,7 @@
 {
     public enum TestState
     {
+        Skipped,
         Pending,
         Success,
         Failed,
