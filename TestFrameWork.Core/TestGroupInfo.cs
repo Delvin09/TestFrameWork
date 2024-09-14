@@ -11,14 +11,8 @@ namespace TestFrameWork.Core
 
         public ImmutableArray<TestInfo> Tests { get; init; }
 
-        public event EventHandler<TestGroupEventArgs>? BeforeGroupTestRun;
-
-        public event EventHandler<TestGroupEventArgs>? AfterGroupTestRun;
-
         public TestGroupResult Run()
         {
-            OnBeforeGroupTestRun(this, new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! });
-
             var result = new TestGroupResult(Name);
             try
             {
@@ -37,12 +31,7 @@ namespace TestFrameWork.Core
                 result.Exception = ex;
             }
 
-            OnAfterGroupTestRun(this, new TestGroupEventArgs { GroupName = Name, FullTypeName = Type.FullName!, AssemblyName = Type.Assembly.FullName! });
-
             return result;
         }
-
-        public void OnBeforeGroupTestRun(object? sender, TestGroupEventArgs e) => BeforeGroupTestRun?.Invoke(this, e);
-        public void OnAfterGroupTestRun(object? sender, TestGroupEventArgs e) => AfterGroupTestRun?.Invoke(this, e);
     }
 }
