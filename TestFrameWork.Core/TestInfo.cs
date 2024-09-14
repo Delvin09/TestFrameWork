@@ -9,56 +9,80 @@ namespace TestFrameWork.Core
     {
         private readonly string _assemblyName = string.Empty;
         private readonly string _groupName = string.Empty;
-        private TestState _testState;
+
+        private TestState _testState = TestState.Pending;
         private string? _message;
+
         public string Name { get; set; } = string.Empty;
 
         public MethodInfo? Method { get; set; }
 
-        public event EventHandler<TestEventArgs>? BeforeTest;
+        public TestState State
+        {
+            get => _testState;
+            set
+            {
+                if (_testState != value && value != TestState.None)
+                {
+                    var oldState = _testState;
+                    _testState = value;
 
-        public event EventHandler<AfterTestEventArgs>? AfterTest;
+                    OnTestStateChanged(oldState);
+                }
+            }
+        }
+
+        private void OnTestStateChanged(TestState oldState)
+        {
+            try
+            {
+                TestStateChanged?.Invoke(
+                    this,
+                    new TestEventArgs
+                    {
+                        AssemblyName = _assemblyName,
+                        GroupName = _groupName,
+                        TestName = Name,
+                        NewState = _testState,
+                        OldState = oldState,
+                        Message = _message
+                    });
+            }
+            catch (Exception ex)
+            {
+                // TODO: log exception
+            }
+        }
+
         public TestResult Run(object subject)
         {
             Exception? exception = null;
             Stopwatch stopWatch = Stopwatch.StartNew();
             try
             {
-                _testState = TestState.Pending;
-
-                TestEventArgs? testArgs = new TestEventArgs { AssemblyName = _assemblyName, GroupName = _groupName, TestName = Name };
-                OnBeforeTest(testArgs);
+                State = TestState.Running;
 
                 Method?.Invoke(subject, []);
 
-                _testState = TestState.Success;
+                State = TestState.Success;
             }
             
             catch (TargetInvocationException ex) when (ex.InnerException is AssertionFailException)
             {
                 _message = ex.InnerException.Message;
-                _testState = TestState.Failed;
+                State = TestState.Failed;
             }
             catch (Exception ex)
             {
-                _testState = TestState.Error;
                 _message = ex.Message;
+                State = TestState.Error;
                 throw;
-            }
-            finally
-            {
-                AfterTestEventArgs afterTestArgs = new AfterTestEventArgs { AssemblyName = _assemblyName, GroupName = _groupName, TestName = Name, Result = _testState, Message = _message };
-                OnAfterTest(afterTestArgs);
             }
 
             stopWatch.Stop();
             return new TestResult(Name, exception, stopWatch.Elapsed);
         }
 
-        public void OnBeforeTest(TestEventArgs e) => 
-            BeforeTest?.Invoke(this, e);
-
-        public void OnAfterTest(AfterTestEventArgs e) => 
-            AfterTest?.Invoke(this, e);
+        public event EventHandler<TestEventArgs>? TestStateChanged;
     }
 }

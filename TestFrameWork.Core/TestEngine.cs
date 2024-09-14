@@ -1,4 +1,5 @@
-﻿using TestFrameWork.Abstractions.Results;
+﻿using TestFrameWork.Abstractions;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
@@ -14,12 +15,28 @@ namespace TestFrameWork.Core
                 {
                     foreach (var group in provider.GetTests())
                     {
-                        var groupTestResult = group.Run();
-                        testReport.AddTestGroup(groupTestResult);
+                        group.BeforeTestRun += Group_BeforeTestRun;
+
+                        try
+                        {
+                            var groupTestResult = group.Run();
+                            testReport.AddTestGroup(groupTestResult);
+                        }
+                        finally
+                        {
+                            group.AfterTestRun += Group_AfterTestRun;
+                        }
                     }
                 }
             }
             return testReport;
         }
+
+        private void Group_AfterTestRun(object? sender, TestEventArgs e) => AfterTestRun?.Invoke(this, e);
+
+        private void Group_BeforeTestRun(object? sender, TestEventArgs e) => BeforeTestRun?.Invoke(this, e);
+
+        public event EventHandler<TestEventArgs>? BeforeTestRun;
+        public event EventHandler<TestEventArgs>? AfterTestRun;
     }
 }

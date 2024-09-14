@@ -24,13 +24,16 @@ namespace TestFrameWork.Core
 
                 foreach (var test in Tests)
                 {
-                    test.BeforeTest += Test_BeforeTest;
-                    test.AfterTest += Test_AfterTest;
+                    test.TestStateChanged += Test_TestStateChanged;
 
-                    result.AddTestResult(test.Run(instance));
-
-                    test.BeforeTest -= Test_BeforeTest;
-                    test.AfterTest -= Test_AfterTest;
+                    try
+                    {
+                        result.AddTestResult(test.Run(instance));
+                    }
+                    finally
+                    {
+                        test.TestStateChanged -= Test_TestStateChanged;
+                    }
                 }
             }
             catch (Exception ex)
@@ -41,14 +44,20 @@ namespace TestFrameWork.Core
             return result;
         }
 
-        private void Test_AfterTest(object? sender, AfterTestEventArgs e)
+        private void Test_TestStateChanged(object? sender, TestEventArgs e)
         {
-            throw new NotImplementedException();
+            var beforeTestStatus = new[] { TestState.None, TestState.Pending, TestState.Running };
+            if (beforeTestStatus.Contains(TestState.Pending))
+            {
+                BeforeTestRun?.Invoke(this, e);
+            }
+            else
+            {
+                AfterTestRun?.Invoke(this, e);
+            }
         }
 
-        private void Test_BeforeTest(object? sender, TestEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        public event EventHandler<TestEventArgs>? BeforeTestRun;
+        public event EventHandler<TestEventArgs>? AfterTestRun;
     }
 }
