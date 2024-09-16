@@ -7,7 +7,7 @@ namespace TestFrameWork.Core
     {
         public string Name { get; init; } = string.Empty;
 
-        public Type? Type { get; init; }
+        public required Type Type { get; set; }
 
         public ImmutableArray<TestInfo> Tests { get; init; }
 
