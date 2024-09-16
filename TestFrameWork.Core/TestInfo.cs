@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using TestFrameWork.Abstractions;
+using TestFrameWork.Abstractions.EventArgs;
 using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core

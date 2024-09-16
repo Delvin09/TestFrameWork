@@ -1,6 +1,6 @@
-﻿namespace TestFrameWork.Abstractions
+﻿namespace TestFrameWork.Abstractions.EventArgs
 {
-    public class TestEventArgs : EventArgs
+    public class TestEventArgs : System.EventArgs
     {
         public required string AssemblyName { get; init; }
 

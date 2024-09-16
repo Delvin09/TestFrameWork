@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using TestFrameWork.Abstractions.Results;
 using TestFrameWork.Abstractions;
+using TestFrameWork.Abstractions.EventArgs;
 
 namespace TestFrameWork.Core
 {

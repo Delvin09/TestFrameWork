@@ -1,6 +1,6 @@
-﻿namespace TestFrameWork.Core
+﻿namespace TestFrameWork.Abstractions.EventArgs
 {
-    public class TestGroupEventArgs : EventArgs
+    public class TestGroupEventArgs : System.EventArgs
     {
         public required string? GroupName { get; init; }
         public required string? FullTypeName { get; init; }
