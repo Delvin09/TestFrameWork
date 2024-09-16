@@ -33,7 +33,6 @@ namespace TestFrameWork.Core
                     }
                 }
             }
-            }
             return testReport;
         }
 
