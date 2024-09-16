@@ -1,4 +1,5 @@
-﻿using TestFrameWork.Abstractions.Results;
+﻿using TestFrameWork.Abstractions.EventArgs;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
@@ -16,8 +17,19 @@ namespace TestFrameWork.Core
                     {
                         OnBeforeGroupTestRun(group);
 
-                        var groupTestResult = group.Run();
-                        testReport.AddTestGroup(groupTestResult);
+                        group.BeforeTestRun += Group_BeforeTestRun;
+                        group.AfterTestRun += Group_AfterTestRun;
+
+                        try
+                        {
+                            var groupTestResult = group.Run();
+                            testReport.AddTestGroup(groupTestResult);
+                        }
+                        finally
+                        {
+                            group.BeforeTestRun -= Group_BeforeTestRun;
+                            group.AfterTestRun -= Group_AfterTestRun;
+                        }
 
                         OnAfterGroupTestRun(group);
                     }
@@ -68,6 +80,12 @@ namespace TestFrameWork.Core
             }
         }
 
+        private void Group_AfterTestRun(object? sender, TestEventArgs e) => AfterTestRun?.Invoke(this, e);
+
+        private void Group_BeforeTestRun(object? sender, TestEventArgs e) => BeforeTestRun?.Invoke(this, e);
+
+        public event EventHandler<TestEventArgs>? BeforeTestRun;
+        public event EventHandler<TestEventArgs>? AfterTestRun;
         public event EventHandler<TestGroupEventArgs>? BeforeGroupTestRun;
         public event EventHandler<TestGroupEventArgs>? AfterGroupTestRun;
     }

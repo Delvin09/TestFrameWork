@@ -1,5 +1,7 @@
 ﻿using System.Collections.Immutable;
 using TestFrameWork.Abstractions.Results;
+using TestFrameWork.Abstractions;
+using TestFrameWork.Abstractions.EventArgs;
 
 namespace TestFrameWork.Core
 {
@@ -23,7 +25,16 @@ namespace TestFrameWork.Core
 
                 foreach (var test in Tests)
                 {
-                    result.AddTestResult(test.Run(instance));
+                    test.TestStateChanged += Test_TestStateChanged;
+
+                    try
+                    {
+                        result.AddTestResult(test.Run(instance));
+                    }
+                    finally
+                    {
+                        test.TestStateChanged -= Test_TestStateChanged;
+                    }
                 }
             }
             catch (Exception ex)
@@ -33,5 +44,21 @@ namespace TestFrameWork.Core
 
             return result;
         }
+
+        private void Test_TestStateChanged(object? sender, TestEventArgs e)
+        {
+            var beforeTestStatus = new[] { TestState.None, TestState.Pending, TestState.Running };
+            if (beforeTestStatus.Contains(TestState.Pending))
+            {
+                BeforeTestRun?.Invoke(this, e);
+            }
+            else
+            {
+                AfterTestRun?.Invoke(this, e);
+            }
+        }
+
+        public event EventHandler<TestEventArgs>? BeforeTestRun;
+        public event EventHandler<TestEventArgs>? AfterTestRun;
     }
 }
