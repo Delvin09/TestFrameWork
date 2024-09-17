@@ -15,7 +15,7 @@ namespace TestFrameWork.Logging
         public void Log(LogInfo data)
         {
             foreach (var l in _loggers)
-                Log(data);
+                l.Log(data);
         }
     }
 }
