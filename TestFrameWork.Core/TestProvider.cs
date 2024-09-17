@@ -48,6 +48,9 @@ namespace TestFrameWork.Core
                 {
                     Name = t.GetCustomAttribute<TestGroupAttribute>()?.Title ?? t.Name,
                     Type = t,
+                    Initializer = t
+                        .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                        .FirstOrDefault(m => m.GetCustomAttribute<InitializationAttribute>() != null),
                     Tests = t
                         .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                         .Where(m => m.GetCustomAttribute<TestAttribute>() != null)
