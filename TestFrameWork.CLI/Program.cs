@@ -1,4 +1,6 @@
 ﻿using TestFrameWork.Core;
+using TestFrameWork.Logging;
+using TestFrameWork.Logging.Abstractions;
 
 namespace TestFrameWork.CLI
 {
@@ -6,21 +8,22 @@ namespace TestFrameWork.CLI
     {
         static void Main(string[] args)
         {
-            var engine = new TestEngine();
-            engine.Run(args);
-
-
-              Logger logger = new Logger();
+            var loggerProvider = new LoggerProvider();
+            var logger = loggerProvider
+                .AddConsole()
+                .CreateLogger();
 
             try
             {
-                logger.LogInfo("Програма запущена успішно.");
+                logger.LogInfo("Test engine starts.");
 
-                throw new InvalidOperationException("Тестова помилка");
+                var engine = new TestEngine(logger);
+                engine.Run(args);
             }
             catch (Exception ex)
             {
-                logger.LogError("Виникла помилка під час виконання програми", ex);
+                logger.LogError("Unhandled exception was occurred.", ex);
+                throw;
             }
         }
     }

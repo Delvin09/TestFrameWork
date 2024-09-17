@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestFrameWork.Abstractions\TestFrameWork.Abstractions.csproj" />
     <ProjectReference Include="..\TestFrameWork.Logging.Abstractions\TestFrameWork.Logging.Abstractions.csproj" />
   </ItemGroup>
 

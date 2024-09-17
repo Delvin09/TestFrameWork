@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TestFrameWork.Abstractions\TestFrameWork.Abstractions.csproj" />
     <ProjectReference Include="..\TestFrameWork.Core\TestFrameWork.Core.csproj" />
+    <ProjectReference Include="..\TestFrameWork.Logging\TestFrameWork.Logging.csproj" />
   </ItemGroup>
 
 </Project>
