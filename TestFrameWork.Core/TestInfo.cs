@@ -44,6 +44,8 @@ namespace TestFrameWork.Core
         {
             try
             {
+                _logger.LogInfo($"Test status of `{Name}` was changed from `{oldState}` to `{_testState}`");
+
                 TestStateChanged?.Invoke(
                     this,
                     new TestEventArgs

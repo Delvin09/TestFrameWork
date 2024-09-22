@@ -67,8 +67,6 @@ namespace TestFrameWork.Core
 
         private void Test_TestStateChanged(object? sender, TestEventArgs e)
         {
-            _logger.LogInfo($"Test status of `{e.TestName}` was changed from `{e.OldState}` to `{e.NewState}`");
-
             if (_beforeTestStatus.Contains(e.NewState))
             {
                 BeforeTestRun?.Invoke(this, e);
