@@ -1,7 +1,8 @@
 ﻿using System.Collections.Immutable;
-using TestFrameWork.Abstractions.Results;
+using System.Reflection;
 using TestFrameWork.Abstractions;
 using TestFrameWork.Abstractions.EventArgs;
+using TestFrameWork.Abstractions.Results;
 
 namespace TestFrameWork.Core
 {
@@ -9,9 +10,11 @@ namespace TestFrameWork.Core
     {
         public string Name { get; init; } = string.Empty;
 
-        public required Type Type { get; set; }
+        public required Type Type { get; internal init; }
 
         public ImmutableArray<TestInfo> Tests { get; init; }
+
+        public MethodInfo? Initializer { get; internal init; }
 
         public TestGroupResult Run()
         {
@@ -22,6 +25,8 @@ namespace TestFrameWork.Core
 
                 var instance = Activator.CreateInstance(Type);
                 if (instance == null) throw new InvalidOperationException("Test Class isn't created.");
+
+                Initializer?.Invoke(instance, null);
 
                 foreach (var test in Tests)
                 {
