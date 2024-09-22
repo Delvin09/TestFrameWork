@@ -1,40 +1,83 @@
 ﻿using System.Collections.Immutable;
+using System.Reflection;
+using TestFrameWork.Abstractions;
+using TestFrameWork.Abstractions.EventArgs;
+using TestFrameWork.Abstractions.Results;
 using TestFrameWork.Logging.Abstractions;
 
 namespace TestFrameWork.Core
 {
     internal class TestGroupInfo
     {
-        private ILogger _logger;
+        private static readonly TestState[] _beforeTestStatus = [TestState.None, TestState.Pending, TestState.Running];
+
+        private readonly ILogger _logger;
 
         public TestGroupInfo(ILogger logger)
         {
             _logger = logger;
         }
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
-        public Type? Type { get; set; }
+        public required Type Type { get; internal init; }
 
-        public ImmutableArray<TestInfo> Tests { get; set; }
+        public ImmutableArray<TestInfo> Tests { get; init; }
 
-        public void Run()
+        public MethodInfo? Initializer { get; internal init; }
+
+        public TestGroupResult Run()
         {
-            _logger.LogInfo($"Start test group `{Name}`. Init test class object.");
-
-            var instance = Activator.CreateInstance(Type!);
-            if (instance == null)
+            var result = new TestGroupResult(Name);
+            try
             {
-                _logger.LogError($"Can't create the test class object for type: `{Type?.FullName}`");
-                throw new InvalidOperationException();
+                _logger.LogInfo($"Start test group `{Name}`. Init test class object.");
+
+                if (Type == null) throw new InvalidOperationException($"Test Class [{Name}] can't be found!");
+
+                var instance = Activator.CreateInstance(Type);
+                if (instance == null) throw new InvalidOperationException("Test Class isn't created.");
+
+                Initializer?.Invoke(instance, null);
+
+                foreach (var test in Tests)
+                {
+                    test.TestStateChanged += Test_TestStateChanged;
+
+                    try
+                    {
+                        result.AddTestResult(test.Run(instance));
+                    }
+                    finally
+                    {
+                        test.TestStateChanged -= Test_TestStateChanged;
+                    }
+                }
+
+                _logger.LogInfo($"End test group `{Name}`.");
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+                _logger.LogError(ex);
             }
 
-            foreach (var test in Tests)
-            {
-                test.Run(instance);
-            }
-
-            _logger.LogInfo($"End test group `{Name}`.");
+            return result;
         }
+
+        private void Test_TestStateChanged(object? sender, TestEventArgs e)
+        {
+            if (_beforeTestStatus.Contains(e.NewState))
+            {
+                BeforeTestRun?.Invoke(this, e);
+            }
+            else
+            {
+                AfterTestRun?.Invoke(this, e);
+            }
+        }
+
+        public event EventHandler<TestEventArgs>? BeforeTestRun;
+        public event EventHandler<TestEventArgs>? AfterTestRun;
     }
 }
