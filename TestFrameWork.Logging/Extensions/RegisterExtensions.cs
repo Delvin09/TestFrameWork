@@ -9,5 +9,11 @@ namespace TestFrameWork.Logging
             loggerProvider.Register(() => new ConsoleLogger());
             return loggerProvider;
         }
+
+        public static ILoggerProvider AddFile(this ILoggerProvider loggerProvider)
+        {
+            loggerProvider.Register(() => new FileLogger());
+            return loggerProvider;
+        }
     }
 }

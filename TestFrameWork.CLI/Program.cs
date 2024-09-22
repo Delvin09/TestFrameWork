@@ -12,6 +12,7 @@ namespace TestFrameWork.CLI
             var loggerProvider = new LoggerProvider();
             var logger = loggerProvider
                 .AddConsole()
+                .AddFile()
                 .CreateLogger();
 
             try
