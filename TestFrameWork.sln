@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFrameWork.CLI", "TestFrameWork.CLI\TestFrameWork.CLI.csproj", "{3DE48AA8-F06F-4D51-B9F8-33565DA33AC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestFrameWork.CLI", "TestFrameWork.CLI\TestFrameWork.CLI.csproj", "{3DE48AA8-F06F-4D51-B9F8-33565DA33AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFrameWork.Abstractions", "TestFrameWork.Abstractions\TestFrameWork.Abstractions.csproj", "{2B2F407C-BD43-4455-A295-05CF54DC226B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestFrameWork.Abstractions", "TestFrameWork.Abstractions\TestFrameWork.Abstractions.csproj", "{2B2F407C-BD43-4455-A295-05CF54DC226B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFrameWork.Core", "TestFrameWork.Core\TestFrameWork.Core.csproj", "{D8B5013B-DFFF-42A3-9D6C-24970AD22551}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestFrameWork.Core", "TestFrameWork.Core\TestFrameWork.Core.csproj", "{D8B5013B-DFFF-42A3-9D6C-24970AD22551}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFrameWork.Logging", "TestFrameWork.Logging\TestFrameWork.Logging.csproj", "{3EF9C5AE-D496-4AF9-BCD2-AD6BF1681917}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFrameWork.Logging.Abstractions", "TestFrameWork.Logging.Abstractions\TestFrameWork.Logging.Abstractions.csproj", "{ADE1939E-6C9E-44FB-9788-AD5C393CF005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{D8B5013B-DFFF-42A3-9D6C-24970AD22551}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8B5013B-DFFF-42A3-9D6C-24970AD22551}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8B5013B-DFFF-42A3-9D6C-24970AD22551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF9C5AE-D496-4AF9-BCD2-AD6BF1681917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF9C5AE-D496-4AF9-BCD2-AD6BF1681917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF9C5AE-D496-4AF9-BCD2-AD6BF1681917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF9C5AE-D496-4AF9-BCD2-AD6BF1681917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE1939E-6C9E-44FB-9788-AD5C393CF005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE1939E-6C9E-44FB-9788-AD5C393CF005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE1939E-6C9E-44FB-9788-AD5C393CF005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE1939E-6C9E-44FB-9788-AD5C393CF005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

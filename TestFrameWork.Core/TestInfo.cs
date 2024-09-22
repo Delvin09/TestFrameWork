@@ -3,6 +3,7 @@ using System.Reflection;
 using TestFrameWork.Abstractions;
 using TestFrameWork.Abstractions.EventArgs;
 using TestFrameWork.Abstractions.Results;
+using TestFrameWork.Logging.Abstractions;
 
 namespace TestFrameWork.Core
 {
@@ -10,13 +11,14 @@ namespace TestFrameWork.Core
     {
         private readonly string _assemblyName = string.Empty;
         private readonly string _groupName = string.Empty;
+        private readonly ILogger _logger;
 
         private TestState _testState = TestState.Pending;
         private string? _message;
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
-        public MethodInfo? Method { get; set; }
+        public MethodInfo? Method { get; init; }
 
         public TestState State
         {
@@ -33,10 +35,17 @@ namespace TestFrameWork.Core
             }
         }
 
+        public TestInfo(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         private void OnTestStateChanged(TestState oldState)
         {
             try
             {
+                _logger.LogInfo($"Test status of `{Name}` was changed from `{oldState}` to `{_testState}`");
+
                 TestStateChanged?.Invoke(
                     this,
                     new TestEventArgs
@@ -51,12 +60,14 @@ namespace TestFrameWork.Core
             }
             catch (Exception ex)
             {
-                // TODO: log exception
+                _logger.LogError(ex);
             }
         }
 
         public TestResult Run(object subject)
         {
+            _logger.LogInfo($"Run test `{Name}`");
+
             Exception? exception = null;
             Stopwatch stopWatch = Stopwatch.StartNew();
             try
@@ -67,17 +78,24 @@ namespace TestFrameWork.Core
 
                 State = TestState.Success;
             }
-            
             catch (TargetInvocationException ex) when (ex.InnerException is AssertionFailException)
             {
                 _message = ex.InnerException.Message;
                 State = TestState.Failed;
+
+                _logger.LogWarning($"Test `{Name}` assertion failed.");
             }
             catch (Exception ex)
             {
                 _message = ex.Message;
                 State = TestState.Error;
+
+                _logger.LogError(ex);
                 throw;
+            }
+            finally
+            {
+                _logger.LogInfo($"End run test `{Name}`");
             }
 
             stopWatch.Stop();

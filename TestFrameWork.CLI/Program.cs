@@ -1,5 +1,7 @@
 ﻿using TestFrameWork.Abstractions.Results;
 using TestFrameWork.Core;
+using TestFrameWork.Logging;
+using TestFrameWork.Logging.Abstractions;
 
 namespace TestFrameWork.CLI
 {
@@ -7,9 +9,24 @@ namespace TestFrameWork.CLI
     {
         static void Main(string[] args)
         {
-            var engine = new TestEngine();
-            TestReport testReport = engine.Run(args);
-            testReport.SaveToFile();
+            var loggerProvider = new LoggerProvider();
+            var logger = loggerProvider
+                .AddConsole()
+                .CreateLogger();
+
+            try
+            {
+                logger.LogInfo("Test engine starts.");
+
+                var engine = new TestEngine(logger);
+                TestReport testReport = engine.Run(args);
+                testReport.SaveToFile();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Unhandled exception was occurred.", ex);
+                throw;
+            }
         }
     }
 }

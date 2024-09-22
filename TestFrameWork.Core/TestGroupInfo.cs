@@ -3,11 +3,21 @@ using System.Reflection;
 using TestFrameWork.Abstractions;
 using TestFrameWork.Abstractions.EventArgs;
 using TestFrameWork.Abstractions.Results;
+using TestFrameWork.Logging.Abstractions;
 
 namespace TestFrameWork.Core
 {
     internal class TestGroupInfo
     {
+        private static readonly TestState[] _beforeTestStatus = [TestState.None, TestState.Pending, TestState.Running];
+
+        private readonly ILogger _logger;
+
+        public TestGroupInfo(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public string Name { get; init; } = string.Empty;
 
         public required Type Type { get; internal init; }
@@ -21,6 +31,8 @@ namespace TestFrameWork.Core
             var result = new TestGroupResult(Name);
             try
             {
+                _logger.LogInfo($"Start test group `{Name}`. Init test class object.");
+
                 if (Type == null) throw new InvalidOperationException($"Test Class [{Name}] can't be found!");
 
                 var instance = Activator.CreateInstance(Type);
@@ -41,10 +53,13 @@ namespace TestFrameWork.Core
                         test.TestStateChanged -= Test_TestStateChanged;
                     }
                 }
+
+                _logger.LogInfo($"End test group `{Name}`.");
             }
             catch (Exception ex)
             {
                 result.Exception = ex;
+                _logger.LogError(ex);
             }
 
             return result;
@@ -52,8 +67,7 @@ namespace TestFrameWork.Core
 
         private void Test_TestStateChanged(object? sender, TestEventArgs e)
         {
-            var beforeTestStatus = new[] { TestState.None, TestState.Pending, TestState.Running };
-            if (beforeTestStatus.Contains(TestState.Pending))
+            if (_beforeTestStatus.Contains(e.NewState))
             {
                 BeforeTestRun?.Invoke(this, e);
             }
