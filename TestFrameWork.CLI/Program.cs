@@ -1,4 +1,5 @@
-﻿using TestFrameWork.Core;
+﻿using TestFrameWork.Abstractions.Results;
+using TestFrameWork.Core;
 using TestFrameWork.Logging;
 using TestFrameWork.Logging.Abstractions;
 
@@ -18,7 +19,8 @@ namespace TestFrameWork.CLI
                 logger.LogInfo("Test engine starts.");
 
                 var engine = new TestEngine(logger);
-                engine.Run(args);
+                TestReport testReport = engine.Run(args);
+                testReport.SaveToFile();
             }
             catch (Exception ex)
             {

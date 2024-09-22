@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Loader;
 using TestFrameWork.Abstractions;
@@ -27,7 +28,7 @@ namespace TestFrameWork.Core
             {
                 var dir = Path.GetDirectoryName(_assemblyPath);
 
-                var assemblyPath = Path.Combine(dir, assemblyToLoad.Name += ".dll");
+            var assemblyPath = Path.Combine(dir!, assemblyToLoad.Name += ".dll");
 
                 var assembly = ctx.LoadFromAssemblyPath(assemblyPath);
                 return assembly;
@@ -60,6 +61,9 @@ namespace TestFrameWork.Core
                 {
                     Name = t.GetCustomAttribute<TestGroupAttribute>()?.Title ?? t.Name,
                     Type = t,
+                    Initializer = t
+                        .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                        .FirstOrDefault(m => m.GetCustomAttribute<InitializationAttribute>() != null),
                     Tests = t
                         .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                         .Where(m => m.GetCustomAttribute<TestAttribute>() != null)
@@ -71,6 +75,5 @@ namespace TestFrameWork.Core
                         .ToImmutableArray()
                 });
         }
-
     }
 }
